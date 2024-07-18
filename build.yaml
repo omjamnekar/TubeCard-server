@@ -1,0 +1,37 @@
+targets:
+  $default:
+    builders:
+      ferry_generator|graphql_builder:
+        enabled: true
+        options:
+          schema: tubecards|lib/graphql/schema.graphql
+          type_overrides:
+            DateTime:
+              name: DateTime
+            JSON:
+              name: JsonObject
+              import: "package:built_value/json_object.dart"
+
+      ferry_generator|serializer_builder:
+        enabled: true
+        options:
+          schema: tubecards|lib/graphql/schema.graphql
+          custom_serializers:
+            - import: "package:tubecards/graphql/serializers/date_time_serializer.dart"
+              name: DateTimeSerializer
+          type_overrides:
+            JSON:
+              name: JsonObject
+              import: "package:built_value/json_object.dart"
+
+      json_serializable_immutable_collections:
+        # configure your options here, same as json_serializable
+        options:
+          explicit_to_json: true
+      json_serializable:json_serializable:
+        generate_for:
+          # exclude everything to avoid conflicts, this library uses a custom builder
+          include:
+          exclude:
+            - test/**
+            - lib/**
